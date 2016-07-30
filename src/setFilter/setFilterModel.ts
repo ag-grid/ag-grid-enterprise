@@ -56,7 +56,7 @@ export class SetFilterModel {
         this.createAllUniqueValues();
         this.createAvailableUniqueValues();
 
-        var oldModel = Object.keys(this.selectedValuesMap);
+        var oldModel = Utils.mapObject(this.selectedValuesMap, (item: any) => {return item;});
 
         this.selectedValuesMap = {};
         this.processMiniFilter();
@@ -84,7 +84,7 @@ export class SetFilterModel {
         }
 
         this.sortValues(uniqueValuesAsAnyObjects);
-        this.allUniqueValues = Utils.toStrings(uniqueValuesAsAnyObjects);
+        this.allUniqueValues = uniqueValuesAsAnyObjects;
     }
 
     private createAvailableUniqueValues() {
@@ -96,7 +96,7 @@ export class SetFilterModel {
 
         var uniqueValuesAsAnyObjects = this.getUniqueValues(true);
         this.sortValues(uniqueValuesAsAnyObjects);
-        this.availableUniqueValues = Utils.toStrings(uniqueValuesAsAnyObjects);
+        this.availableUniqueValues = uniqueValuesAsAnyObjects;
     }
 
     private sortValues(values: any[]): void {
@@ -202,7 +202,8 @@ export class SetFilterModel {
         var count = this.allUniqueValues.length;
         for (var i = 0; i < count; i++) {
             var value = this.allUniqueValues[i];
-            this.selectedValuesMap[value] = null;
+            var stringValue = value.toString();
+            this.selectedValuesMap[stringValue] = {value: value, selected: true};
         }
         this.selectedValuesCount = count;
     }
@@ -225,21 +226,27 @@ export class SetFilterModel {
     }
 
     public unselectValue(value: any) {
-        if (this.selectedValuesMap[value] !== undefined) {
-            delete this.selectedValuesMap[value];
+        var stringValue = value.toString();
+        var selectedValue = this.selectedValuesMap[stringValue];
+        if ( selectedValue ) {
+            selectedValue.selected = false;
             this.selectedValuesCount--;
         }
     }
 
     public selectValue(value: any) {
-        if (this.selectedValuesMap[value] === undefined) {
-            this.selectedValuesMap[value] = null;
-            this.selectedValuesCount++;
+        var stringValue = value.toString();
+        var selectedValue = this.selectedValuesMap[stringValue];
+        if (!selectedValue) {
+            selectedValue = this.selectedValuesMap[stringValue] = {value: value, selected: true};
         }
+        selectedValue.selected = true;
+        this.selectedValuesCount++;
     }
 
     public isValueSelected(value: any) {
-        return this.selectedValuesMap[value] !== undefined;
+        var selectedValue = this.selectedValuesMap[value];
+        return selectedValue && selectedValue.selected;
     }
 
     public isEverythingSelected() {
@@ -255,8 +262,8 @@ export class SetFilterModel {
             return null;
         }
         var selectedValues = <any>[];
-        Utils.iterateObject(this.selectedValuesMap, function (key: any) {
-            selectedValues.push(key);
+        Utils.iterateObject(this.selectedValuesMap, function (key: any, value: any) {
+            selectedValues.push(value.value);
         });
         return selectedValues;
     }
@@ -266,8 +273,9 @@ export class SetFilterModel {
             this.selectNothing();
             for (var i = 0; i < model.length; i++) {
                 var newValue = model[i];
-                if (this.allUniqueValues.indexOf(newValue) >= 0) {
-                    this.selectValue(model[i]);
+                if (this.allUniqueValues.indexOf(newValue.value) >= 0) {
+                    var stringValue = newValue.value.toString();
+                    this.selectValue(stringValue);
                 }
             }
         } else {
