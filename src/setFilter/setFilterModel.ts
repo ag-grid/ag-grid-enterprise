@@ -76,14 +76,15 @@ export class SetFilterModel {
     }
 
     private createAllUniqueValues() {
+        var uniqueValuesAsAnyObjects = <any>[];
         if (this.usingProvidedSet) {
-            this.allUniqueValues = Utils.toStrings(this.filterParams.values);
+            uniqueValuesAsAnyObjects = this.filterParams.values;
         } else {
-            var uniqueValuesAsAnyObjects = this.getUniqueValues(false);
-            this.allUniqueValues = Utils.toStrings(uniqueValuesAsAnyObjects);
+            uniqueValuesAsAnyObjects = this.getUniqueValues(false);
         }
 
-        this.sortValues(this.allUniqueValues);
+        this.sortValues(uniqueValuesAsAnyObjects);
+        this.allUniqueValues = Utils.toStrings(uniqueValuesAsAnyObjects);
     }
 
     private createAvailableUniqueValues() {
@@ -94,8 +95,8 @@ export class SetFilterModel {
         }
 
         var uniqueValuesAsAnyObjects = this.getUniqueValues(true);
+        this.sortValues(uniqueValuesAsAnyObjects);
         this.availableUniqueValues = Utils.toStrings(uniqueValuesAsAnyObjects);
-        this.sortValues(this.availableUniqueValues);
     }
 
     private sortValues(values: any[]): void {
