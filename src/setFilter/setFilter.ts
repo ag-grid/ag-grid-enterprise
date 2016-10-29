@@ -160,6 +160,12 @@ export class SetFilter extends Component implements IFilter {
 
         this.eSelectAll.onclick = this.onSelectAll.bind(this);
 
+        this.updateSelectAll();
+
+        this.setupApply();
+        this.virtualList.refresh();
+    }
+    private updateSelectAll(){
         if (this.model.isEverythingSelected()) {
             this.eSelectAll.indeterminate = false;
             this.eSelectAll.checked = true;
@@ -169,11 +175,7 @@ export class SetFilter extends Component implements IFilter {
         } else {
             this.eSelectAll.indeterminate = true;
         }
-
-        this.setupApply();
-        this.virtualList.refresh();
     }
-
     private setupApply() {
         if (this.applyActive) {
             this.eApplyButton = <HTMLButtonElement> this.queryForHtmlElement('#applyButton');
@@ -293,6 +295,7 @@ export class SetFilter extends Component implements IFilter {
 
     public setModel(dataModel: any) {
         this.model.setModel(dataModel);
+        this.updateSelectAll();
         this.virtualList.refresh();
     }
 
