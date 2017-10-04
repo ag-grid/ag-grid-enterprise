@@ -13,7 +13,6 @@ import {VirtualList, VirtualListModel} from "../rendering/virtualList";
 
 export class SetFilter extends BaseFilter <string, ISetFilterParams, string[]> {
     private model: SetFilterModel;
-    private suppressSorting: boolean;
 
     @QuerySelector('#selectAll')
     private eSelectAll: HTMLInputElement;
