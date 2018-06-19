@@ -259,6 +259,10 @@ export class RangeController implements IRangeController {
     }
 
     public onDragStart(mouseEvent: MouseEvent): void {
+	if ((<HTMLElement> mouseEvent.target).classList.contains('checkbox')) {
+	     event.stopPropagation();
+	     return;
+	}
         if (!this.gridOptionsWrapper.isEnableRangeSelection()) { return; }
 
         // ctrlKey for windows, metaKey for Apple
