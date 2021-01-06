@@ -1,15 +1,16 @@
-import { FilterChangedEvent, Component, IFloatingFilter, IFloatingFilterParams } from "ag-grid-community";
-import { SetFilterModel } from "./setFilterModel";
+import { Component, IFloatingFilter, IFloatingFilterParams } from 'ag-grid-community';
+import { SetFilterModel } from './setFilterModel';
 export declare class SetFloatingFilterComp extends Component implements IFloatingFilter {
-    private eFloatingFilterText;
-    private valueFormatterService;
+    private readonly eFloatingFilterText;
+    private readonly valueFormatterService;
+    private readonly columnController;
     private params;
     private lastKnownModel;
     private availableValuesListenerAdded;
     constructor();
+    destroy(): void;
     init(params: IFloatingFilterParams): void;
-    onAvailableValuesChanged(filterChangedEvent: FilterChangedEvent): void;
     onParentModelChanged(parentModel: SetFilterModel): void;
     private addAvailableValuesListener;
-    private updateSetFilterText;
+    private updateFloatingFilterText;
 }

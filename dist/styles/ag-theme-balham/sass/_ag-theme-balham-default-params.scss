@@ -15,7 +15,7 @@ $ag-theme-balham-default-params: (
     border-color: #bdc3c7,
     row-border-color: ag-derived(border-color, $lighten: 10),
     odd-row-background-color: #fcfdfe,
-    row-hover-color: #f2f2f2,
+    row-hover-color: #ecf0f1,
     input-border-color: #95a5a6,
     input-disabled-background-color: #ebebeb,
     checkbox-border-radius: 3px,
@@ -27,6 +27,7 @@ $ag-theme-balham-default-params: (
     input-focus-box-shadow: 0 0 2px 1px ag-derived(input-focus-border-color),
 
     // derived colours (shared by balham-dark)
+    subheader-toolbar-background-color: ag-derived(subheader-background-color, $opacity: 0.5),
     range-selection-background-color: ag-derived(balham-active-color, $opacity: 0.2),
     range-selection-border-color: ag-derived(balham-active-color),
     range-selection-highlight-color: ag-derived(balham-active-color),
@@ -44,7 +45,7 @@ $ag-theme-balham-default-params: (
     icon-size: 16px,
     row-height: ag-derived(grid-size, $times: 7),
     header-height: ag-derived(grid-size, $times: 8),
-    list-item-height: ag-derived(grid-size, $times: 7),
+    list-item-height: ag-derived(grid-size, $times: 6),
     row-group-indent-size: ag-derived(grid-size, $times: 3, $plus: icon-size),
     cell-horizontal-padding: ag-derived(grid-size, $times: 3),
     input-height: ag-derived(grid-size, $times: 4),

@@ -12,6 +12,8 @@
 
         @include ag-theme-rtl(( margin-left: ag-param(widget-container-horizontal-padding) ));
     }
+
+    @include ag-keyboard-focus((ag-column-select-header), 4px);
     
     .ag-column-select-header {
         height: ag-param(header-height);
@@ -27,6 +29,6 @@
 
     .ag-column-group-icons,
     .ag-column-select-header-icon {
-        color: ag-param(secondary-foreground-color);
+        @include ag-color-property(color, secondary-foreground-color);
     }
 }

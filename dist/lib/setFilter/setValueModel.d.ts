@@ -1,74 +1,79 @@
-import { ColDef, Column, IRowModel, ValueFormatterService, IEventEmitter } from "ag-grid-community";
+import { ISetFilterParams, AgPromise, ValueFormatterService, IEventEmitter } from 'ag-grid-community';
+import { ISetFilterLocaleText } from './localeText';
 export declare enum SetFilterModelValuesType {
     PROVIDED_LIST = 0,
-    PROVIDED_CB = 1,
-    NOT_PROVIDED = 2
+    PROVIDED_CALLBACK = 1,
+    TAKEN_FROM_GRID_VALUES = 2
 }
 export declare class SetValueModel implements IEventEmitter {
-    static EVENT_AVAILABLE_VALUES_CHANGES: string;
-    private colDef;
-    private filterParams;
-    private clientSideRowModel;
-    private valueGetter;
-    private allUniqueValues;
-    private availableUniqueValues;
-    private availableUniqueValuesMap;
-    private displayedValues;
-    private miniFilter;
-    private selectedValuesCount;
-    private selectedValuesMap;
-    private suppressSorting;
-    private formatter;
-    private showingAvailableOnly;
+    private readonly filterParams;
+    private readonly colDef;
+    private readonly column;
+    private readonly doesRowPassOtherFilters;
+    private readonly suppressSorting;
+    private readonly setIsLoading;
+    private readonly valueFormatterService;
+    private readonly translate;
+    static EVENT_AVAILABLE_VALUES_CHANGED: string;
+    private readonly localEventService;
+    private readonly formatter;
+    private readonly clientSideValuesExtractor;
     private valuesType;
-    private doesRowPassOtherFilters;
-    private modelUpdatedFunc;
-    private isLoadingFunc;
-    private filterValuesExternalPromise;
-    private filterValuesPromise;
-    private valueFormatterService;
-    private column;
-    private localEventService;
-    constructor(colDef: ColDef, rowModel: IRowModel, valueGetter: any, doesRowPassOtherFilters: any, suppressSorting: boolean, modelUpdatedFunc: (values: string[] | null, selected?: string[] | null) => void, isLoadingFunc: (loading: boolean) => void, valueFormatterService: ValueFormatterService, column: Column);
+    private miniFilterText;
+    /** Values provided to the filter for use. */
+    private providedValues;
+    /** Values can be loaded asynchronously, so wait on this promise if you need to ensure values have been loaded. */
+    private allValuesPromise;
+    /** All possible values for the filter, sorted if required. */
+    private allValues;
+    /** Remaining values when filters from other columns have been applied. */
+    private availableValues;
+    /** All values that are currently displayed, after the mini-filter has been applied. */
+    private displayedValues;
+    /** Values that have been selected for this filter. */
+    private selectedValues;
+    constructor(rowModel: IRowModel, valueGetter: (node: RowNode) => any, filterParams: ISetFilterParams, colDef: ColDef, column: Column, doesRowPassOtherFilters: (node: RowNode) => boolean, suppressSorting: boolean, setIsLoading: (loading: boolean) => void, valueFormatterService: ValueFormatterService, translate: (key: keyof ISetFilterLocaleText) => string);
     addEventListener(eventType: string, listener: Function, async?: boolean): void;
     removeEventListener(eventType: string, listener: Function, async?: boolean): void;
-    refreshAfterNewRowsLoaded(keepSelection: any, everythingSelected: boolean): void;
-    refreshValues(valuesToUse: string[], keepSelection: any, isSelectAll: boolean): void;
-    private refreshSelection;
-    refreshAfterAnyFilterChanged(): void;
-    private createAllUniqueValues;
-    private onAsyncValuesLoaded;
-    private areValuesSync;
+    /**
+     * Re-fetches the values used in the filter from the value source.
+     * If keepSelection is false, the filter selection will be reset to everything selected,
+     * otherwise the current selection will be preserved.
+     */
+    refreshValues(keepSelection?: boolean): AgPromise<void>;
+    /**
+     * Overrides the current values being used for the set filter.
+     * If keepSelection is false, the filter selection will be reset to everything selected,
+     * otherwise the current selection will be preserved.
+     */
+    overrideValues(valuesToUse: (string | null)[], keepSelection?: boolean): AgPromise<void>;
+    refreshAfterAnyFilterChanged(): AgPromise<void>;
+    private updateAllValues;
     setValuesType(value: SetFilterModelValuesType): void;
     getValuesType(): SetFilterModelValuesType;
-    private setValues;
-    private extractSyncValuesToUse;
     isValueAvailable(value: string): boolean;
-    private createAvailableUniqueValues;
+    private showAvailableOnly;
+    private updateAvailableValues;
     private sortValues;
-    private getUniqueValues;
-    setMiniFilter(newMiniFilter: string | null): boolean;
+    private getValuesFromRows;
+    /** Sets mini filter value. Returns true if it changed from last value, otherwise false. */
+    setMiniFilter(value?: string): boolean;
     getMiniFilter(): string;
-    private processMiniFilter;
+    private updateDisplayedValues;
     getDisplayedValueCount(): number;
-    getDisplayedValue(index: any): any;
-    selectAllUsingMiniFilter(): void;
-    private selectOn;
-    private valueToKey;
-    private keyToValue;
-    isFilterActive(): boolean;
-    selectNothingUsingMiniFilter(): void;
-    private selectNothing;
+    getDisplayedValue(index: any): string;
+    hasSelections(): boolean;
     getUniqueValueCount(): number;
     getUniqueValue(index: any): string | null;
-    unselectValue(value: any): void;
-    selectAllFromMiniFilter(): void;
-    selectValue(value: any): void;
-    isValueSelected(value: any): boolean;
-    isEverythingSelected(): boolean;
-    isNothingSelected(): boolean;
-    getModel(): string[] | null;
-    setModel(model: string[] | null, isSelectAll?: boolean): void;
-    private setSyncModel;
-    onFilterValuesReady(callback: () => void): void;
+    getValues(): string[];
+    selectAllMatchingMiniFilter(clearExistingSelection?: boolean): void;
+    deselectAllMatchingMiniFilter(): void;
+    selectValue(value: string): void;
+    deselectValue(value: string): void;
+    isValueSelected(value: string): boolean;
+    isEverythingVisibleSelected(): boolean;
+    isNothingVisibleSelected(): boolean;
+    getModel(): (string | null)[] | null;
+    setModel(model: (string | null)[] | null): AgPromise<void>;
+    private resetSelectionState;
 }
