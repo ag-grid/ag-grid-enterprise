@@ -106,7 +106,6 @@
 @mixin ag-color-property($property, $param, $important: false) {
     $value: ag-param($param, $caller: "permitted internal _ag-theme-params.scss access");
     $important: if($important, !important, null);
-
     @if $value != null {
         #{$property}: $value $important;
     }
@@ -116,10 +115,10 @@
             #{$property}: $value-as-css-var $important;
         }
     }
+    $-ag-is-permitted-internal-color-access: false !global;
 }
 
-
-$-ag-allow-color-param-access-with-ag-param: true;
+$-ag-allow-color-param-access-with-ag-param: true !global;
 @mixin ag-allow-color-param-access-with-ag-param($allow) {
     $-ag-allow-color-param-access-with-ag-param: $allow !global;
 }
@@ -177,12 +176,11 @@ $-ag-params: null !default;
             $value: -ag-param-as-css-var($reference-name);
         }
     }
-
     @if $value == null {
         @return var(--ag-#{$name});
+    } @else {
+        @return var(--ag-#{$name}, #{$value});
     }
-
-    @return var(--ag-#{$name}, #{$value});
 }
 
 // Get a parameter, with no checks other than that the parameter exists
@@ -254,15 +252,6 @@ $-ag-params: null !default;
         $reference-name: map-get($derived, "reference-name");
         @warn "Problem while calculating theme parameter `#{$context-name}: #{-ag-inspect-derived-value($derived)}`. This rule attempts to modify the color of `#{$reference-name}` using $#{$operator}, but (#{$reference-name}: #{$lhs}) is a CSS variable and can't be modified at compile time. Either set `#{$reference-name}` to a CSS color value (e.g. #ffffff) or provide a value for `#{$context-name}` that does not use $#{$operator}";
         @return null;
-    }
-    @if $operator == "mix" {
-        $color-param: nth($rhs, 1);
-        $color: -ag-resolve-param-name($params, $color-param);
-        @if -ag-is-css-var-token($color) {
-            $reference-name: map-get($derived, "reference-name");
-            @warn "Problem while calculating theme parameter `#{$context-name}: #{-ag-inspect-derived-value($derived)}`. This rule attempts to modify the color of `#{$reference-name}` using $#{$operator}, but (#{$color-param}) is a CSS variable and can't be modified at compile time. Either set `#{$color-param}` to a CSS color value (e.g. #ffffff) or provide a value for `#{$context-name}` that does not use $#{$operator}";
-            @return null;
-        }
     }
     @if type-of($rhs) == string {
         $rhs: -ag-resolve-param-name($params, $rhs);

@@ -6,7 +6,7 @@
     }
 
     .ag-root-wrapper {
-        @include ag-border(primary);
+        @include ag-border(primary, $radius: ag-param(border-radius));
     }
     
     // support 20 levels here because row group indentation is used for tree data which can be quite deep
@@ -59,10 +59,15 @@
 
     .ag-cell-data-changed-animation {
         background-color: transparent;
+        transition: background-color 1s;
     }
 
     .ag-cell-highlight {
         @include ag-color-property(background-color, range-selection-highlight-color, $important: true);
+    }
+
+    .ag-cell-highlight-animation {
+        transition: background-color 1s;
     }
 
     .ag-row {
@@ -77,7 +82,12 @@
             border-width: 1px;
             @include ag-color-property(border-color, row-border-color);
 
-            border-bottom-style: solid;
+            &:not(.ag-row-first) {
+                border-top-style: solid;
+            }
+            &.ag-row-last {
+                border-bottom-style: solid;
+            }
         }
     }
 
@@ -115,9 +125,7 @@
     }
 
     .ag-row-hover {
-        @if ag-param-is-set(row-hover-color) {
-            @include ag-color-property(background-color, row-hover-color);
-        }
+        @include ag-color-property(background-color, row-hover-color);
     }
 
     .ag-right-aligned-cell {
@@ -174,12 +182,6 @@
     .ag-details-row {
         padding: ag-param(grid-size) * 5;
         @include ag-color-property(background-color, background-color);
-    }
-
-    .ag-layout-auto-height, .ag-layout-print {
-        .ag-center-cols-clipper, .ag-center-cols-container {
-            min-height: 50px;
-        }
     }
 
     .ag-overlay-loading-wrapper {

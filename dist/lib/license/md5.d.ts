@@ -1,5 +1,4 @@
-import { BeanStub } from "ag-grid-community";
-export declare class MD5 extends BeanStub {
+export declare class MD5 {
     private ieCompatibility;
     private init;
     private md5cycle;

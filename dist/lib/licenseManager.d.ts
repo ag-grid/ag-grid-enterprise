@@ -1,5 +1,4 @@
-import { BeanStub } from 'ag-grid-community';
-export declare class LicenseManager extends BeanStub {
+export declare class LicenseManager {
     private static RELEASE_INFORMATION;
     private static licenseKey;
     private watermarkMessage;

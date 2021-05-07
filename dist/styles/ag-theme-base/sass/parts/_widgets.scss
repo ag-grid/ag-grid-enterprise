@@ -45,13 +45,13 @@
         font-size: inherit;
         line-height: inherit;
         color: inherit;
-
+    
         @if ag-param-is-set(input-border-color) {
             border-width: 1px;
             border-style: solid;
             @include ag-color-property(border-color, input-border-color);
         }
-
+    
         &:disabled {
             @include ag-color-property(color, disabled-foreground-color);
             @include ag-color-property(background-color, input-disabled-background-color);
@@ -95,8 +95,6 @@
         height: ag-param(list-item-height);
     }
 
-    @include ag-keyboard-focus((ag-virtual-list-item), 4px);
-
     .ag-select-list {
         @include ag-color-property(background-color, background-color);
         overflow-y: auto;
@@ -106,10 +104,6 @@
     .ag-list-item {
         display: flex;
         align-items: center;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-
         &.ag-active-item {
             @include ag-color-property(background-color, row-hover-color);
         }
@@ -131,15 +125,8 @@
         .ag-picker-field-wrapper {
             @include ag-color-property(background-color, background-color);
             min-height: ag-param(list-item-height);
-            cursor: default;
-        }
-
-        &.ag-disabled .ag-picker-field-wrapper:focus {
-            box-shadow: none;
-        }
-
-        &:not(.ag-cell-editor) {
             height: ag-param(list-item-height);
+            cursor: default;
         }
         .ag-picker-field-display {
             margin: 4px;
@@ -172,7 +159,7 @@
     .ag-rich-select-value {
         padding: 0 ag-param(grid-size) 0 ag-param(cell-horizontal-padding);
         height: ag-param(row-height);
-
+        
         @include ag-border(secondary, bottom);
     }
 
@@ -218,13 +205,13 @@
     .ag-group-contracted {
         cursor: pointer;
     }
-
+    
     .ag-group-title-bar-icon {
         cursor: pointer;
         flex: none;
         @include ag-color-property(color, secondary-foreground-color);
     }
-
+    
     .ag-group-child-count {
         @include ag-theme-rtl(( margin-left: 2px ));
     }
@@ -233,7 +220,7 @@
         @include ag-color-property(background-color, subheader-background-color);
         padding: ag-param(grid-size);
     }
-
+    
     .ag-group-toolbar {
         padding: ag-param(grid-size);
     }
@@ -287,7 +274,7 @@
             box-shadow: ag-param(input-focus-box-shadow);
         }
     }
-
+    
     .ag-picker-field-button {
         @include ag-color-property(background-color, background-color);
         @include ag-color-property(color, secondary-foreground-color);
@@ -441,7 +428,7 @@
     }
 
     // Column select
-
+    
     @for $i from 1 to 10 {
         .ag-column-select-indent-#{$i} {
             @include ag-theme-rtl((padding-left: $i * ag-param(column-select-indent-size)));
@@ -451,8 +438,6 @@
     .ag-column-select-header-icon {
         cursor: pointer;
     }
-
-    @include ag-keyboard-focus((ag-column-select-header-icon), 0px);
 
     .ag-column-group-icons,
     .ag-column-select-header-icon,
@@ -466,10 +451,6 @@
             @include ag-theme-rtl((margin-right: ag-param(widget-horizontal-spacing)))
         }
     }
-
-    @include ag-keyboard-focus((
-        ag-column-select-virtual-list-item
-    ), 1px);
 
     .ag-column-select-column-group,
     .ag-column-select-column {
@@ -490,8 +471,8 @@
         @include ag-theme-rtl(( margin-left: ag-param(icon-size) + ag-param(grid-size) * 2 ));
     }
 
-    .ag-column-select-virtual-list-viewport {
-        padding: (ag-param(widget-container-vertical-padding) / 2) ag-param(widget-container-horizontal-padding);
+    .ag-column-select-list {
+        padding: ag-param(widget-container-vertical-padding) ag-param(widget-container-horizontal-padding);
     }
 }
 
@@ -544,12 +525,12 @@
     display: inline-block;
     vertical-align: middle;
     flex: none;
-
+    
     &:focus-within, &:active {
         outline: none;
         box-shadow: ag-param(input-focus-box-shadow);
     }
-
+    
     &.ag-disabled {
         opacity: 0.5;
     }
@@ -593,7 +574,7 @@
 
 @mixin ag-radio {
     @include ag-check-button-base();
-
+    
     border-radius: ag-param(icon-size);
 
     &::after {
